@@ -1,0 +1,47 @@
+/* Add this in your styles.css or directly in the component */
+.topics-section {
+    background-color: #f8f9fa;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.card {
+    border-radius: 12px;
+    background-color: white;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-header {
+    background-color: #e9ecef;
+    padding: 20px;
+    text-align: center;
+}
+
+.card-title {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #218838;
+}
