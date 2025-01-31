@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Define the type for the Topics and Previous Papers sections
 interface TopicsAndPapersProps {
-  topics: string[];
-  previousPapers: string[];
+  topics: { id: number, name: string }[]; // Array of topics with id and name
+  previousPapers: { id: number, name: string }[];
   examId: number;
 }
 
@@ -26,12 +27,12 @@ const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPaper
                 <div className="card-header text-center" style={{ backgroundColor: '#e9ecef', padding: '15px' }}>
                   <img 
                     src={`https://img.icons8.com/ios-filled/100/open-book.png`} 
-                    alt={topic} 
+                    alt={topic.name} 
                     style={{ width: '50px', height: '50px' }} 
                   />
                 </div>
                 <div className="card-body text-center">
-                  <h5 className="card-title text-primary" style={{ fontWeight: 'bold' }}>{topic}</h5>
+                  <h5 className="card-title text-primary" style={{ fontWeight: 'bold' }}>{topic.name}</h5>
                   {/* Progress Bar */}
                   <div style={{ height: '5px', backgroundColor: '#e0e0e0' }}>
                     <div 
@@ -43,9 +44,13 @@ const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPaper
                       }}
                     ></div>
                   </div>
-                  <button className="btn btn-outline-primary mt-3" style={{ borderRadius: '20px' }}>
+                  <Link
+                    to={`/questions/${topic.id}`} // Link to the question page, passing topicId
+                    className="btn btn-outline-primary mt-3"
+                    style={{ borderRadius: '20px', backgroundColor: '#28a745', color: '#fff' }}
+                  >
                     Start Learning
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -62,7 +67,7 @@ const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPaper
                 style={{ border: '1px solid #ddd', backgroundColor: '#fff' }}
               >
                 <div className="card-header" style={{ backgroundColor: '#f7f7f7', padding: '15px' }}>
-                  <h5 className="card-title text-primary">{paper}</h5>
+                  <h5 className="card-title text-primary">{paper.name}</h5>
                 </div>
                 <div className="card-body">
                   <p className="card-text" style={{ fontSize: '14px', color: '#555' }}>

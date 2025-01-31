@@ -7,8 +7,8 @@ import PracticeCTA from '../components/examdetails/PracticeCTA';
 interface ExamDetails {
   name: string;
   description: string;
-  topics: string[];
-  previousPapers: string[];
+  topics: { id: number, name: string }[]; // Include topic ID
+  previousPapers: { id: number, name: string }[];
 }
 
 const ExamDetailPage: React.FC = () => {
@@ -27,8 +27,8 @@ const ExamDetailPage: React.FC = () => {
           setExamDetails({
             name: data.response.name,
             description: data.response.description,
-            topics: data.response.topics?.map((topic: { name: string }) => topic.name) || [],
-            previousPapers: data.response.question_papers?.map((paper: { name: string }) => paper.name) || [],
+            topics: data.response.topics?.map((topic: { id: number, name: string }) => ({ id: topic.id, name: topic.name })) || [],
+            previousPapers: data.response.question_papers?.map((paper: { id: number, name: string }) => ({ id: paper.id, name: paper.name })) || [],
           });
         }
       } catch (error) {

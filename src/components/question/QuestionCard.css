@@ -1,0 +1,122 @@
+/* Styling for the QuestionCard container */
+.question-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Style for the question text */
+.question-text {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+/* Container for the options */
+.options-container {
+  margin-bottom: 20px;
+}
+
+/* Custom radio button style */
+.custom-radio {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+/* Style for the label of the radio button */
+.option-label {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Correct answer highlighted */
+.option-label.correct {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Incorrect answer style */
+.option-label.incorrect {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Style for the radio button input */
+.custom-radio-input {
+  margin-right: 10px;
+}
+
+/* Label for the radio button */
+.custom-radio-label {
+  font-size: 1rem;
+}
+
+/* Style for the Submit button */
+.submit-btn {
+  width: 100%;
+  font-size: 1rem;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.submit-btn.answered {
+  background-color: #28a745;
+  color: white;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Success and error feedback styles */
+.text-success {
+  color: #28a745;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/* Style for the Submit button */
+.submit-btn {
+  width: 100%;
+  font-size: 1rem;
+  padding: 10px;
+  cursor: pointer;
+  border: 2px solid #4b6c9a;  /* Soft blue-gray border */
+  background-color: white;
+  color: #4b6c9a;  /* Soft blue-gray text */
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Smooth transition on hover */
+}
+
+/* Hover effect for the Submit button */
+.submit-btn:hover {
+  background-color: #4b6c9a; /* Soft blue-gray background on hover */
+  color: white;  /* Text turns white on hover */
+  border-color: #3b5a7d; /* Darker blue-gray border on hover */
+}
+
+/* Button styling when the answer has been submitted */
+.submit-btn.answered {
+  background-color: #28a745; /* Green background for correct answer */
+  color: white;
+  border-color: #28a745;  /* Green border */
+}
+
+/* Disabled state */
+.submit-btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  border-color: #ccc;  /* Disable hover effect when disabled */
+}

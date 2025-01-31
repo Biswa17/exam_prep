@@ -8,6 +8,8 @@ import ResourcesPage from './screens/ResourcesPage';
 import AboutPage from './screens/AboutPage';
 import ContactPage from './screens/ContactPage';
 import ExamDetails from './screens/ExamDetailPage'
+import QuestionPage from './screens/QuestionPage';
+
 
 
 const App: React.FC = () => {
@@ -23,6 +25,7 @@ const App: React.FC = () => {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/exam/:examId" element={<ExamDetails />} />
+            <Route path="/questions/:topicId" element={<QuestionPage />} />
           </Routes>
         </main>
         <Footer />
