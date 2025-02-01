@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import QuestionCard from "../components/question/QuestionCard";
 import NavigationControls from "../components/question/NavigationControls";
 
-
 const QuestionPage: React.FC = () => {
   // Hardcoded 15 sample questions
   const questions = [
@@ -72,7 +71,6 @@ const QuestionPage: React.FC = () => {
       options: ["40", "42", "44", "48"],
       correctAnswer: "42",
     },
-    
   ];
 
   // Track current question index
@@ -81,6 +79,12 @@ const QuestionPage: React.FC = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>(new Array(questions.length).fill(''));
   // Track if the answer for a particular question is submitted
   const [isSubmitted, setIsSubmitted] = useState<boolean[]>(new Array(questions.length).fill(false));
+  // Track selected difficulty
+  const [difficulty, setDifficulty] = useState<string>("easy");
+
+  const handleDifficultyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setDifficulty(event.target.value);
+  };
 
   // Number of questions to display at a time
   const questionsPerPage = 10;
@@ -115,9 +119,25 @@ const QuestionPage: React.FC = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="text-center">Practice Questions</h2>
+    <div className="container mt-4" style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
+      <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <button className="back-btn" style={{ padding: "10px 15px", fontSize: "14px", cursor: "pointer" }}>
+          Back to Topics
+        </button>
+        <h2 className="topic-name" style={{ fontSize: "28px", fontWeight: "bold", margin: 0 }}>
+          Current Topic
+        </h2>
+        <select className="difficulty-selector" onChange={handleDifficultyChange} style={{ padding: "8px", fontSize: "14px", cursor: "pointer" }}>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+          <option value="mixed">Mixed</option>
+        </select>
+      </div>
 
+      <h2 className="text-center" style={{ fontSize: "24px", fontWeight: "600", marginBottom: "20px" }}>
+        Practice Questions
+      </h2>
       {/* Displaying questions based on current page */}
       {currentQuestions.map((question, index) => (
         <div key={question.id} className="mb-4">
