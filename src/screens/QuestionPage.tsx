@@ -2,74 +2,44 @@ import React, { useState } from "react";
 import QuestionCard from "../components/question/QuestionCard";
 import NavigationControls from "../components/question/NavigationControls";
 
+// Define type for choices structure
+interface Choice {
+  value: string;
+  explanation: string | null;
+}
+
+// Define type for each question
+interface Question {
+  id: number;
+  question_text: string;
+  choices: { [key: string]: Choice };
+  correct_option: string;
+}
+
 const QuestionPage: React.FC = () => {
-  // Hardcoded 15 sample questions
-  const questions = [
+  // Updated questions with new format
+  const questions: Question[] = [
     {
       id: 1,
-      question: "What is the value of 2 + 3?",
-      options: ["3", "4", "5", "6"],
-      correctAnswer: "5",
+      question_text: "What is 2 + 3?",
+      choices: {
+        A: { value: "3", explanation: null },
+        B: { value: "4", explanation: null },
+        C: { value: "5", explanation: "Correct! 2 + 3 is 5." },
+        D: { value: "6", explanation: "Incorrect. 2 + 3 is not 6." },
+      },
+      correct_option: "C",
     },
     {
       id: 2,
-      question: "Which number is even?",
-      options: ["3", "5", "8", "9"],
-      correctAnswer: "8",
-    },
-    {
-      id: 3,
-      question: "What comes after Monday?",
-      options: ["Sunday", "Wednesday", "Friday", "Tuesday"],
-      correctAnswer: "Tuesday",
-    },
-    {
-      id: 4,
-      question: "What is the capital of India?",
-      options: ["Mumbai", "Delhi", "Kolkata", "Chennai"],
-      correctAnswer: "Delhi",
-    },
-    {
-      id: 5,
-      question: "What is 7 + 8?",
-      options: ["13", "14", "15", "16"],
-      correctAnswer: "15",
-    },
-    {
-      id: 6,
-      question: "What is the square root of 64?",
-      options: ["6", "7", "8", "9"],
-      correctAnswer: "8",
-    },
-    {
-      id: 7,
-      question: "Which is the largest ocean?",
-      options: ["Atlantic", "Indian", "Pacific", "Arctic"],
-      correctAnswer: "Pacific",
-    },
-    {
-      id: 8,
-      question: "What is 12 - 5?",
-      options: ["5", "6", "7", "8"],
-      correctAnswer: "7",
-    },
-    {
-      id: 9,
-      question: "What is 9 * 3?",
-      options: ["24", "25", "27", "28"],
-      correctAnswer: "27",
-    },
-    {
-      id: 10,
-      question: "Which country is known as the Land of the Rising Sun?",
-      options: ["China", "Japan", "India", "South Korea"],
-      correctAnswer: "Japan",
-    },
-    {
-      id: 11,
-      question: "What is 6 * 7?",
-      options: ["40", "42", "44", "48"],
-      correctAnswer: "42",
+      question_text: "Which number is even?",
+      choices: {
+        A: { value: "3", explanation: "3 is an odd number." },
+        B: { value: "5", explanation: "5 is an odd number." },
+        C: { value: "8", explanation: "Correct! 8 is an even number." },
+        D: { value: "9", explanation: "9 is an odd number." },
+      },
+      correct_option: "C",
     },
   ];
 
@@ -95,14 +65,14 @@ const QuestionPage: React.FC = () => {
   const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
 
   const handleNext = () => {
-    if (currentIndex + questionsPerPage < questions.length) {
-      setCurrentIndex(currentIndex + questionsPerPage);
+    if (currentIndex + 1 < questions.length) {
+      setCurrentIndex(currentIndex + 1);
     }
   };
 
   const handlePrevious = () => {
-    if (currentIndex - questionsPerPage >= 0) {
-      setCurrentIndex(currentIndex - questionsPerPage);
+    if (currentIndex - 1 >= 0) {
+      setCurrentIndex(currentIndex - 1);
     }
   };
 
@@ -121,13 +91,22 @@ const QuestionPage: React.FC = () => {
   return (
     <div className="container mt-4" style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
       <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-        <button className="back-btn" style={{ padding: "10px 15px", fontSize: "14px", cursor: "pointer" }}>
+        <button
+          className="back-btn"
+          style={{ padding: "10px 15px", fontSize: "14px", cursor: "pointer" }}
+          onClick={() => window.history.back()} // Back button functionality
+        >
           Back to Topics
         </button>
         <h2 className="topic-name" style={{ fontSize: "28px", fontWeight: "bold", margin: 0 }}>
           Current Topic
         </h2>
-        <select className="difficulty-selector" onChange={handleDifficultyChange} style={{ padding: "8px", fontSize: "14px", cursor: "pointer" }}>
+        <select
+          className="difficulty-selector"
+          onChange={handleDifficultyChange}
+          style={{ padding: "8px", fontSize: "14px", cursor: "pointer" }}
+          value={difficulty}
+        >
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
           <option value="hard">Hard</option>
@@ -135,21 +114,23 @@ const QuestionPage: React.FC = () => {
         </select>
       </div>
 
-      <h2 className="text-center" style={{ fontSize: "24px", fontWeight: "600", marginBottom: "20px" }}>
-        Practice Questions
-      </h2>
-      {/* Displaying questions based on current page */}
-      {currentQuestions.map((question, index) => (
-        <div key={question.id} className="mb-4">
-          <QuestionCard
-            question={question}
-            selectedAnswer={selectedAnswers[index]}
-            setSelectedAnswer={(answer: string) => handleAnswerChange(index, answer)}
-            isSubmitted={isSubmitted[index]}
-            handleSubmit={() => handleSubmit(index)}
-          />
-        </div>
-      ))}
+
+
+      <h2 className="text-center">Practice Questions</h2>
+      {/* Displaying questions */}
+      <div>
+        {questions.map((question, index) => (
+          <div key={question.id}>
+            <QuestionCard
+              question={question}
+              selectedAnswer={selectedAnswers[index]}
+              setSelectedAnswer={(answer: string) => handleAnswerChange(index, answer)}
+              isSubmitted={isSubmitted[index]}
+              handleSubmit={() => handleSubmit(index)}
+            />
+          </div>
+        ))}
+      </div>
 
       {/* Navigation Controls */}
       <NavigationControls
