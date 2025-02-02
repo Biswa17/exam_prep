@@ -22,3 +22,26 @@ footer {
 footer a:hover {
   color: #28a745;  /* Highlight links on hover */
 }
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensures the app covers the full viewport height */
+}
+
+
+footer {
+  background: #f8f9fa;
+  padding: 20px;
+  text-align: center;
+  margin-top: auto; /* Ensures footer stays at the bottom */
+}

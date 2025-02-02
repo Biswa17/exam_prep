@@ -7,17 +7,15 @@ import FeaturesPage from './screens/FeaturesPage';
 import ResourcesPage from './screens/ResourcesPage';
 import AboutPage from './screens/AboutPage';
 import ContactPage from './screens/ContactPage';
-import ExamDetails from './screens/ExamDetailPage'
+import ExamDetails from './screens/ExamDetailPage';
 import QuestionPage from './screens/QuestionPage';
-
-
 
 const App: React.FC = () => {
   return (
     <Router>
-      <div>
+      <div className="app-container">
         <NavBar />
-        <main>
+        <main className="content">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/features" element={<FeaturesPage />} />
