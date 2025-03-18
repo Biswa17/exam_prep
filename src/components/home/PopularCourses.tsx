@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Define the type for the exams
 interface Exam {
@@ -14,7 +15,7 @@ const PopularCourses: React.FC = () => {
 
   // Fetch the data when the component mounts
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/sf/get_popular_exams') // Replace with your actual API URL
+    fetch(`${BASE_URL}/sf/get_popular_exams`)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "success" && data.response?.exams) {

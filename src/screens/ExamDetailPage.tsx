@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 import ExamHeader from '../components/examdetails/ExamHeader';
 import TopicsAndPapers from '../components/examdetails/TopicsAndPapers';
 import PracticeCTA from '../components/examdetails/PracticeCTA';
@@ -20,7 +21,7 @@ const ExamDetailPage: React.FC = () => {
 
     const fetchExamDetails = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/sf/get_exam/${examId}`);
+        const response = await fetch(`${BASE_URL}/sf/get_exam/${examId}`);
         const data = await response.json();
 
         if (data.status === 'success' && data.response) {
