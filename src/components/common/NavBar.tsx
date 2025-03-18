@@ -1,12 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const NavBar: React.FC = () => {
+  const location = useLocation();
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#004085' }}>
-      <div className="container-fluid">
+    <nav className="navbar navbar-expand-lg">
+      <div className="container">
         {/* Logo and Navigation Links (Left Side) */}
-        <Link className="navbar-brand" to="/" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>
+        <Link className="navbar-brand animate-fade-in" to="/">
           Exam Prep
         </Link>
         <button
@@ -23,19 +24,29 @@ const NavBar: React.FC = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link active" to="/">Home</Link>
+              <Link className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/">
+                <span className="nav-text">Home</span>
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/features">Features</Link>
+              <Link className={`nav-link ${location.pathname === '/features' ? 'active' : ''}`} to="/features">
+                <span className="nav-text">Features</span>
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/resources">Resources</Link>
+              <Link className={`nav-link ${location.pathname === '/resources' ? 'active' : ''}`} to="/resources">
+                <span className="nav-text">Resources</span>
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/about">About</Link>
+              <Link className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} to="/about">
+                <span className="nav-text">About</span>
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/contact">Contact</Link>
+              <Link className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`} to="/contact">
+                <span className="nav-text">Contact</span>
+              </Link>
             </li>
           </ul>
         </div>
@@ -43,15 +54,9 @@ const NavBar: React.FC = () => {
         {/* User Image (Right Side) */}
         <div className="d-flex align-items-center">
           <img
-            src="https://www.w3schools.com/w3images/avatar2.png" // Placeholder image
+            src="https://www.w3schools.com/w3images/avatar2.png"
             alt="User"
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              border: '2px solid #fff',
-              marginLeft: '15px',
-            }}
+            className="user-avatar"
           />
         </div>
       </div>
