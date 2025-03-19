@@ -8,7 +8,7 @@ interface TopicsAndPapersProps {
   examId: number;
 }
 
-const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPapers }) => {
+const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPapers, examId }) => {
   return (
     <section className="topics-papers-section py-5" style={{ backgroundColor: '#f8f9fa' }}>
       <div className="container">
@@ -45,7 +45,7 @@ const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPaper
                     ></div>
                   </div>
                   <Link
-                    to={`/questions/${topic.id}`} // Link to the question page, passing topicId
+                    to={`/questions/${topic.id}?examId=${examId}`} // Pass examId as query parameter
                     className="btn btn-outline-primary mt-3"
                     style={{ borderRadius: '20px', backgroundColor: '#28a745', color: '#fff' }}
                   >
