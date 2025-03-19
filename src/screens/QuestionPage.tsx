@@ -1,6 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import QuestionCard from "../components/question/QuestionCard";
 import NavigationControls from "../components/question/NavigationControls";
+
+// API response interfaces
+interface APIResponse {
+  status: string;
+  status_code: number;
+  message: string;
+  response: {
+    questions: Question[];
+    total_count: number;
+    page_number: number;
+    questions_per_page: number;
+  };
+}
 
 // Define type for choices structure
 interface Choice {
@@ -17,62 +31,62 @@ interface Question {
 }
 
 const QuestionPage: React.FC = () => {
-  // Updated questions with new format
-  const questions: Question[] = [
-    {
-      id: 1,
-      question_text: "What is 2 + 3?",
-      choices: {
-        A: { value: "3", explanation: null },
-        B: { value: "4", explanation: null },
-        C: { value: "5", explanation: "Correct! 2 + 3 is 5." },
-        D: { value: "6", explanation: "Incorrect. 2 + 3 is not 6." },
-      },
-      correct_option: "C",
-    },
-    {
-      id: 2,
-      question_text: "Which number is even?",
-      choices: {
-        A: { value: "3", explanation: "3 is an odd number." },
-        B: { value: "5", explanation: "5 is an odd number." },
-        C: { value: "8", explanation: "Correct! 8 is an even number." },
-        D: { value: "9", explanation: "9 is an odd number." },
-      },
-      correct_option: "C",
-    },
-  ];
+  const { topicId } = useParams<{ topicId: string }>();
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalQuestions, setTotalQuestions] = useState(0);
 
-  // Track current question index
-  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/sf/questions/topic/${topicId}?page=${pageNumber}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch questions');
+        }
+
+        const data: APIResponse = await response.json();
+        
+        if (data.status !== 'success') {
+          throw new Error(data.message || 'Failed to fetch questions');
+        }
+
+        setQuestions(data.response.questions);
+        setTotalQuestions(data.response.total_count);
+        // Reset selected answers and submitted state when questions change
+        setSelectedAnswers(new Array(data.response.questions.length).fill(''));
+        setIsSubmitted(new Array(data.response.questions.length).fill(false));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (topicId) {
+      fetchQuestions();
+    }
+  }, [topicId, pageNumber]); // Refetch when topic or page changes
+
   // Track selected answers for each question
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>(new Array(questions.length).fill(''));
   // Track if the answer for a particular question is submitted
   const [isSubmitted, setIsSubmitted] = useState<boolean[]>(new Array(questions.length).fill(false));
-  // Track selected difficulty
-  const [difficulty, setDifficulty] = useState<string>("easy");
 
-  const handleDifficultyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setDifficulty(event.target.value);
-  };
-
-  // Number of questions to display at a time
-  const questionsPerPage = 10;
-
-  // Get the questions to display on the current page
-  const indexOfLastQuestion = currentIndex + questionsPerPage;
-  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
-  const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
 
   const handleNext = () => {
-    if (currentIndex + 1 < questions.length) {
-      setCurrentIndex(currentIndex + 1);
+    if ((pageNumber * 10) < totalQuestions) {
+      setPageNumber(prev => prev + 1);
     }
   };
 
   const handlePrevious = () => {
-    if (currentIndex - 1 >= 0) {
-      setCurrentIndex(currentIndex - 1);
+    if (pageNumber > 1) {
+      setPageNumber(prev => prev - 1);
     }
   };
 
@@ -101,25 +115,29 @@ const QuestionPage: React.FC = () => {
         <h2 className="topic-name" style={{ fontSize: "28px", fontWeight: "bold", margin: 0 }}>
           Current Topic
         </h2>
-        <select
-          className="difficulty-selector"
-          onChange={handleDifficultyChange}
-          style={{ padding: "8px", fontSize: "14px", cursor: "pointer" }}
-          value={difficulty}
-        >
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-          <option value="mixed">Mixed</option>
-        </select>
       </div>
 
 
 
       <h2 className="text-center">Practice Questions</h2>
+      
+      {loading && (
+        <div className="text-center p-4">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+
       {/* Displaying questions */}
       <div>
-        {questions.map((question, index) => (
+        {!loading && !error && questions.length > 0 && questions.map((question, index) => (
           <div key={question.id}>
             <QuestionCard
               question={question}
@@ -134,8 +152,8 @@ const QuestionPage: React.FC = () => {
 
       {/* Navigation Controls */}
       <NavigationControls
-        currentIndex={currentIndex}
-        totalQuestions={questions.length}
+        currentIndex={(pageNumber - 1) * 10}
+        totalQuestions={totalQuestions}
         handleNext={handleNext}
         handlePrevious={handlePrevious}
         selectedAnswer={selectedAnswers}
