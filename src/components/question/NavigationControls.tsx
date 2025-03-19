@@ -6,6 +6,7 @@ interface NavigationControlsProps {
   handleNext: () => void;
   handlePrevious: () => void;
   selectedAnswer: string[];
+  isLoading: boolean;
 }
 
 const NavigationControls: React.FC<NavigationControlsProps> = ({
@@ -13,22 +14,44 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   totalQuestions,
   handleNext,
   handlePrevious,
+  isLoading,
 }) => {
+  // Calculate current page and total pages
+  const currentPage = currentIndex + 1;
+  const totalPages = Math.ceil(totalQuestions / 10);
+
   return (
-    <div className="d-flex justify-content-between mt-5 mb-5">
+    <div className="d-flex justify-content-between align-items-center mt-5 mb-5">
       <button
         className="btn btn-secondary"
         onClick={handlePrevious}
-        disabled={currentIndex === 0}
+        disabled={currentPage === 1 || isLoading}
       >
-        Previous 10
+        {isLoading ? (
+          <span>
+            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Loading...
+          </span>
+        ) : (
+          'Previous'
+        )}
       </button>
+      <span>
+        Page {currentPage} of {totalPages}
+      </span>
       <button
-        className="btn btn-secondary"
+        className="btn btn-primary"
         onClick={handleNext}
-        disabled={currentIndex + 10 >= totalQuestions}
+        disabled={currentPage >= totalPages || isLoading}
       >
-        Next 10
+        {isLoading ? (
+          <span>
+            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Loading...
+          </span>
+        ) : (
+          'Next'
+        )}
       </button>
     </div>
   );
