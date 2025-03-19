@@ -21,7 +21,7 @@ const ExamDetailPage: React.FC = () => {
 
     const fetchExamDetails = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/sf/get_exam/${examId}`);
+        const response = await fetch(`${BASE_URL}/api/sf/get_exam/${examId}`);
         const data = await response.json();
 
         if (data.status === 'success' && data.response) {

@@ -20,7 +20,7 @@ const PopularCourses: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`${BASE_URL}/sf/get_popular_exams`);
+        const response = await fetch(`${BASE_URL}/api/sf/get_popular_exams`);
         if (!response.ok) {
           throw new Error('Failed to fetch exams');
         }

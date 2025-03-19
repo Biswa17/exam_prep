@@ -9,6 +9,7 @@ import AboutPage from './screens/AboutPage';
 import ContactPage from './screens/ContactPage';
 import ExamDetails from './screens/ExamDetailPage';
 import QuestionPage from './screens/QuestionPage';
+import Login from './screens/Login';
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
         <main className="content">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/resources" element={<ResourcesPage />} />
             <Route path="/about" element={<AboutPage />} />

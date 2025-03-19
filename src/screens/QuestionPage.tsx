@@ -43,7 +43,7 @@ const QuestionPage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/sf/questions/topic/${topicId}?page=${pageNumber}`);
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/sf/questions/topic/${topicId}?page=${pageNumber}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch questions');
