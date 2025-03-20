@@ -10,6 +10,7 @@ import ContactPage from './screens/ContactPage';
 import ExamDetails from './screens/ExamDetailPage';
 import QuestionPage from './screens/QuestionPage';
 import Login from './screens/Login';
+import ProfilePage from './screens/ProfilePage';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const App: React.FC = () => {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/exam/:examId" element={<ExamDetails />} />
             <Route path="/questions/:topicId" element={<QuestionPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </main>
         <Footer />
