@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Define the type for the Topics and Previous Papers sections
 interface TopicsAndPapersProps {
@@ -9,6 +9,13 @@ interface TopicsAndPapersProps {
 }
 
 const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPapers, examId }) => {
+  const navigate = useNavigate();
+  const accessToken = localStorage.getItem('access_token');
+
+  const handleLoginRedirect = () => {
+    navigate('/login');
+  };
+
   return (
     <section className="topics-papers-section py-5" style={{ backgroundColor: '#f8f9fa' }}>
       <div className="container">
@@ -44,13 +51,23 @@ const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPaper
                       }}
                     ></div>
                   </div>
-                  <Link
-                    to={`/questions/${topic.id}?examId=${examId}`} // Pass examId as query parameter
-                    className="btn btn-outline-primary mt-3"
-                    style={{ borderRadius: '20px', backgroundColor: '#28a745', color: '#fff' }}
-                  >
-                    Start Learning
-                  </Link>
+                  {accessToken ? (
+                    <Link
+                      to={`/questions/${topic.id}?examId=${examId}`} // Pass examId as query parameter
+                      className="btn btn-outline-primary mt-3"
+                      style={{ borderRadius: '20px', backgroundColor: '#28a745', color: '#fff' }}
+                    >
+                      Start Learning
+                    </Link>
+                  ) : (
+                    <button
+                      className="btn btn-outline-primary mt-3"
+                      style={{ borderRadius: '20px', backgroundColor: '#28a745', color: '#fff' }}
+                      onClick={handleLoginRedirect}
+                    >
+                      Login to Start Learning
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
