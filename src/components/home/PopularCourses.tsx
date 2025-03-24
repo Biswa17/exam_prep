@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBook, FaExclamationCircle, FaArrowRight } from 'react-icons/fa';
 
-import { apiRequest } from "../../utils/apiHelper"
+import { apiRequest } from "../../utils/apiHelper";
 
 // Define the type for the exams
 interface Exam {

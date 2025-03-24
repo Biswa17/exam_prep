@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import QuestionCard from "../components/question/QuestionCard";
 import NavigationControls from "../components/question/NavigationControls";
+import { apiRequest } from "../utils/apiHelper"
 
 // API response interfaces
 interface APIResponse {
@@ -75,21 +76,20 @@ const QuestionPage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/sf/questions/topic/${topicId}?page=${pageNumber}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch questions');
-        }
-
-        const data: APIResponse = await response.json();
+        const data = await apiRequest<{ questions: any[]; total_count: number }>(
+          `/api/sf/questions/topic/${topicId}?page=${pageNumber}`,
+          "GET"
+        );
         console.log('API Response:', data); // Log the API response for debugging
         
-        if (data.status !== 'success') {
-          throw new Error(data.message || 'Failed to fetch questions');
+        if (data.status === "success" && data.response) {
+          setQuestions(data.response.questions);
+          setTotalQuestions(data.response.total_count);
+        } else {
+          setError(data.message || "Failed to fetch questions");
         }
-
-        setQuestions(data.response.questions);
-        setTotalQuestions(data.response.total_count);
+  
+        setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         console.error('Error fetching questions:', err);

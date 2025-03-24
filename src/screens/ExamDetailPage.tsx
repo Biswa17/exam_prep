@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 import ExamHeader from '../components/examdetails/ExamHeader';
 import TopicsAndPapers from '../components/examdetails/TopicsAndPapers';
 import PracticeCTA from '../components/examdetails/PracticeCTA';
+import { apiRequest } from "../utils/apiHelper"
+
 
 interface ExamDetails {
   name: string;
@@ -21,9 +22,10 @@ const ExamDetailPage: React.FC = () => {
 
     const fetchExamDetails = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/sf/get_exam/${examId}`);
-        const data = await response.json();
-
+        const data = await apiRequest<{ name: string; description: string; topics: { id: number; name: string }[]; question_papers: { id: number; name: string }[] }>(
+          `/api/sf/get_exam/${examId}`,
+          "GET"
+        );
         if (data.status === 'success' && data.response) {
           setExamDetails({
             name: data.response.name,
