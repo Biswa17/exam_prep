@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaBook, FaSpinner, FaExclamationCircle, FaArrowRight } from 'react-icons/fa';
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { FaBook, FaExclamationCircle, FaArrowRight } from 'react-icons/fa';
+
+import { apiRequest } from "../../utils/apiHelper"
 
 // Define the type for the exams
 interface Exam {
@@ -20,11 +21,8 @@ const PopularCourses: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`${BASE_URL}/api/sf/get_popular_exams`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch exams');
-        }
-        const data = await response.json();
+        const data = await apiRequest<{ exams: Exam[] }>("/api/sf/get_popular_exams", "GET");
+
         if (data.status === "success" && data.response?.exams) {
           setExams(data.response.exams);
         } else {
