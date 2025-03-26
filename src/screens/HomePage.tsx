@@ -1,17 +1,15 @@
 // src/screens/HomePage.tsx
 
-import React from 'react';
-import HeroSection from '../components/home/HeroSection';
-import FeatureSection from '../components/home/FeatureSection';
-import PopularCourses from '../components/home/PopularCourses';
-import TestimonialsSection from '../components/home/TestimonialsSection';
-import CallToAction from '../components/home/CallToAction';
-
+import React from "react";
+import HeroSection from "../components/home/HeroSection";
+import FeatureSection from "../components/home/FeatureSection";
+import PopularCourses from "../components/home/PopularCourses";
+import TestimonialsSection from "../components/home/TestimonialsSection";
+import CallToAction from "../components/home/CallToAction";
 
 const HomePage: React.FC = () => {
   return (
     <div>
-
       <section>
         <HeroSection />
       </section>
@@ -31,8 +29,6 @@ const HomePage: React.FC = () => {
       <section>
         <CallToAction />
       </section>
-      
-
     </div>
   );
 };

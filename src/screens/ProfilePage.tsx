@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import './ProfilePage.css';
+import { useEffect, useState } from "react";
+import "./ProfilePage.css";
 
 interface UserDetails {
   user_id: number;
@@ -18,29 +18,32 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const token = localStorage.getItem('access_token');
+        const token = localStorage.getItem("access_token");
         if (!token) {
-          throw new Error('No authentication token found');
+          throw new Error("No authentication token found");
         }
 
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/sf/user/details`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/api/sf/user/details`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user details');
+          throw new Error("Failed to fetch user details");
         }
 
         const data = await response.json();
-        if (data.status === 'success') {
+        if (data.status === "success") {
           setUserDetails(data.response);
         } else {
-          throw new Error(data.message || 'Failed to fetch user details');
+          throw new Error(data.message || "Failed to fetch user details");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
