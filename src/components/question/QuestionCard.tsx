@@ -48,9 +48,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           return (
             <div key={idx} className="custom-radio">
               <label
-                className={`option-label ${selectedAnswer === option.value &&
+                  className={`option-label ${selectedAnswer === optionKey &&
                   isSubmitted &&
-                  option.value !== question.choices[question.correct_option].value
+                  optionKey !== question.correct_option
                   ? "incorrect"
                   : ""
                   } ${isCorrect && isSubmitted ? "correct" : ""}`}
@@ -58,14 +58,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
                 <input
                   type="radio"
                   name={`question-${question.id}`}
-                  value={option.value}
-                  checked={selectedAnswer === option.value}
-                  onChange={() => handleAnswerSelect(option.value, optionKey)} // Update selected option key
+                  value={optionKey}
+                  checked={selectedAnswer === optionKey}
+                  onChange={() => handleAnswerSelect(optionKey, optionKey)} // Update selected option key
                   disabled={isSubmitted} // Disable after submission
                   className="custom-radio-input"
                 />
                 <span className="custom-radio-label">
-                  {optionLabels[idx]} - {option.value}
+                  {optionKey} - {option.value}
                 </span>
               </label>
             </div>
@@ -83,11 +83,11 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
       {isSubmitted && (
         <>
-          {selectedAnswer === question.choices[question.correct_option].value ? (
+          {selectedAnswer === question.correct_option ? (
             <p className="text-success mt-3">✅ Correct Answer!</p>
           ) : (
             <p className="text-danger mt-3">
-              ❌ Incorrect! Correct answer: {question.choices[question.correct_option].value}
+              ❌ Incorrect! Correct answer: {question.correct_option}
             </p>
           )}
 

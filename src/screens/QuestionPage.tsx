@@ -125,7 +125,7 @@ const QuestionPage: React.FC = () => {
               const optionKey = question.selected_option;
               const optionValue = question.choices[optionKey]?.value;
               if (optionValue) {
-                apiSelectedAnswers[question.id] = optionValue;
+                apiSelectedAnswers[question.id] = optionKey
                 // Also mark the question as submitted
                 apiSubmittedState[question.id] = true;
               }
@@ -187,10 +187,10 @@ const QuestionPage: React.FC = () => {
     }));
   };
 
-  const handleAnswerChange = (questionId: number, answer: string) => {
+  const handleAnswerChange = (questionId: number, optionKey: string) => {
     setSelectedAnswers((prev) => ({
       ...prev,
-      [questionId]: answer,
+      [questionId]: optionKey,
     }));
   };
 
@@ -351,8 +351,8 @@ const QuestionPage: React.FC = () => {
               <QuestionCard
                 question={question}
                 selectedAnswer={selectedAnswers[question.id] || ""}
-                setSelectedAnswer={(answer: string) =>
-                  handleAnswerChange(question.id, answer)
+                setSelectedAnswer={(optionKey: string) =>
+                  handleAnswerChange(question.id, optionKey)
                 }
                 isSubmitted={isSubmitted[question.id] || false}
                 handleSubmit={() => handleSubmit(question.id)}
