@@ -29,6 +29,7 @@ interface Question {
   question_text: string;
   choices: { [key: string]: Choice };
   correct_option: string;
+  selected_option: string | null;
 }
 
 const QuestionPage: React.FC = () => {
@@ -113,6 +114,26 @@ const QuestionPage: React.FC = () => {
         if (data.status === "success" && data.response) {
           setQuestions(data.response.questions);
           setTotalQuestions(data.response.total_count);
+          
+          // Update selectedAnswers with API's selected_option when available
+          const apiSelectedAnswers = { ...selectedAnswers };
+          const apiSubmittedState = { ...isSubmitted };
+          
+          data.response.questions.forEach(question => {
+            if (question.selected_option) {
+              // If API has a selected_option, use the corresponding choice value
+              const optionKey = question.selected_option;
+              const optionValue = question.choices[optionKey]?.value;
+              if (optionValue) {
+                apiSelectedAnswers[question.id] = optionValue;
+                // Also mark the question as submitted
+                apiSubmittedState[question.id] = true;
+              }
+            }
+          });
+          
+          setSelectedAnswers(apiSelectedAnswers);
+          setIsSubmitted(apiSubmittedState);
         } else {
           setError(data.message || "Failed to fetch questions");
         }
