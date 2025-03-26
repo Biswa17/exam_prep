@@ -95,10 +95,19 @@ const QuestionPage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
+
+        // Determine status parameter based on filters
+        let statusParam = '';
+        if (filters.solved && !filters.unsolved) {
+          statusParam = '&status=solved';
+        } else if (!filters.solved && filters.unsolved) {
+          statusParam = '&status=unsolved';
+        }
+
         const data = await apiRequest<{
           questions: any[];
           total_count: number;
-        }>(`/api/sf/questions/topic/${topicId}?page=${pageNumber}`, "GET");
+        }>(`/api/sf/questions/topic/${topicId}?page=${pageNumber}${statusParam}`, "GET");
         console.log("API Response:", data); // Log the API response for debugging
 
         if (data.status === "success" && data.response) {
@@ -120,7 +129,7 @@ const QuestionPage: React.FC = () => {
     if (topicId) {
       fetchQuestions();
     }
-  }, [topicId, pageNumber]); // Refetch when topic or page changes
+  }, [topicId, pageNumber, filters]); // Refetch when topic, page, or filters change
 
   const handleNext = () => {
     const totalPages = Math.ceil(totalQuestions / 10);
