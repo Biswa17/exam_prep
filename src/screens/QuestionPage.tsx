@@ -207,32 +207,83 @@ const QuestionPage: React.FC = () => {
           Current Topic
         </h2>
         <div
-          className="filter-options"
+          className="filter-container"
           style={{
+            background: "#f8f9fa",
+            padding: "12px 20px",
+            borderRadius: "10px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
             display: "flex",
-            justifyContent: "flex-end",
-            gap: "20px",
-            alignItems: "center",
+            flexDirection: "column",
+            gap: "8px"
           }}
         >
-          <label>
-            <input 
-              type="checkbox" 
-              name="filter" 
-              value="solved" 
-              checked={filters.solved}
-              onChange={(e) => handleFilterChange('solved', e.target.checked)}
-            /> Solved
-          </label>
-          <label>
-            <input 
-              type="checkbox" 
-              name="filter" 
-              value="unsolved" 
-              checked={filters.unsolved}
-              onChange={(e) => handleFilterChange('unsolved', e.target.checked)}
-            /> Unsolved
-          </label>
+          <div style={{ 
+            fontSize: "14px", 
+            color: "#6c757d", 
+            marginBottom: "4px",
+            fontWeight: 500
+          }}>
+            Filter Questions
+          </div>
+          <div style={{
+            display: "flex",
+            gap: "16px",
+            alignItems: "center"
+          }}>
+            <label 
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#e9ecef"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                cursor: "pointer",
+                padding: "4px 8px",
+                borderRadius: "6px",
+                transition: "background-color 0.2s"
+              }}>
+              <input 
+                type="checkbox" 
+                name="filter" 
+                value="solved" 
+                checked={filters.solved}
+                onChange={(e) => handleFilterChange('solved', e.target.checked)}
+                style={{
+                  width: "16px",
+                  height: "16px",
+                  cursor: "pointer"
+                }}
+              />
+              <span style={{ fontSize: "14px" }}>Solved</span>
+            </label>
+            <label 
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#e9ecef"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                cursor: "pointer",
+                padding: "4px 8px",
+                borderRadius: "6px",
+                transition: "background-color 0.2s"
+              }}>
+              <input 
+                type="checkbox" 
+                name="filter" 
+                value="unsolved" 
+                checked={filters.unsolved}
+                onChange={(e) => handleFilterChange('unsolved', e.target.checked)}
+                style={{
+                  width: "16px",
+                  height: "16px",
+                  cursor: "pointer"
+                }}
+              />
+              <span style={{ fontSize: "14px" }}>Unsolved</span>
+            </label>
+          </div>
         </div>
       </div>
 
