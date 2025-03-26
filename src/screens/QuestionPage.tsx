@@ -64,6 +64,11 @@ const QuestionPage: React.FC = () => {
       return; // Don't allow both to be unchecked
     }
     setFilters(prev => ({...prev, [filterType]: checked}));
+    setPageNumber(1);
+    // Update URL with new page number while preserving examId
+    const url = new URL(window.location.href);
+    url.searchParams.set("page_number", "1");
+    window.history.pushState({}, "", url.toString());
   };
 
   // Initialize state from localStorage or default values
@@ -152,30 +157,58 @@ const QuestionPage: React.FC = () => {
     }
   }, [topicId, pageNumber, filters]); // Refetch when topic, page, or filters change
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    try {
+      await apiRequest(
+        `/api/sf/questions/user-answer`,
+        "POST",
+        {
+          topic_id: Number(topicId),
+          answers: Object.entries(selectedAnswers).map(([questionId, option]) => ({
+            question_id: Number(questionId),
+            selected_option: option
+          }))
+        }
+      );
+    } catch (error) {
+      console.error("Submission failed:", error);
+    }
+    
     const totalPages = Math.ceil(totalQuestions / 10);
     const nextPage = pageNumber + 1;
     if (nextPage <= totalPages) {
-      console.log("Moving to next page:", nextPage); // Debug log
+      console.log("Moving to next page:", nextPage);
       setPageNumber(nextPage);
-      // Update URL with new page number while preserving examId
       const url = new URL(window.location.href);
       url.searchParams.set("page_number", nextPage.toString());
       window.history.pushState({}, "", url.toString());
-      // Scroll to top
       window.scrollTo(0, 0);
     }
   };
 
-  const handlePrevious = () => {
+  const handlePrevious = async () => {
+    try {
+      await apiRequest(
+        `/api/sf/questions/user-answer`,
+        "POST",
+        {
+          topic_id: Number(topicId),
+          answers: Object.entries(selectedAnswers).map(([questionId, option]) => ({
+            question_id: Number(questionId),
+            selected_option: option
+          }))
+        }
+      );
+    } catch (error) {
+      console.error("Submission failed:", error);
+    }
+
     if (pageNumber > 1) {
-      console.log("Moving to previous page:", pageNumber - 1); // Debug log
+      console.log("Moving to previous page:", pageNumber - 1);
       setPageNumber((prev) => prev - 1);
-      // Update URL with new page number while preserving examId
       const url = new URL(window.location.href);
       url.searchParams.set("page_number", (pageNumber - 1).toString());
       window.history.pushState({}, "", url.toString());
-      // Scroll to top
       window.scrollTo(0, 0);
     }
   };
@@ -194,13 +227,36 @@ const QuestionPage: React.FC = () => {
     }));
   };
 
-  const handleBackToTopics = () => {
-    if (examId) {
-      navigate(`/exam/${examId}`);
-    } else {
-      // If somehow examId is missing, navigate to exams list
-      console.error("No exam ID found in URL parameters");
-      navigate("/exam");
+  const handleBackToTopics = async () => {
+    try {
+      // Submit answers to API
+      const response = await apiRequest(
+        `/api/sf/questions/user-answer`,
+        "POST",
+        {
+          topic_id: Number(topicId),
+          answers: Object.entries(selectedAnswers).map(([questionId, option]) => ({
+            question_id: Number(questionId),
+            selected_option: option
+          }))
+        }
+      );
+
+    } catch (error) {
+      console.error("Submission failed:", error);
+    } finally {
+      // Clear local storage and state
+      setSelectedAnswers({});
+      setIsSubmitted({});
+      localStorage.removeItem(`selectedAnswers_${topicId}`);
+      localStorage.removeItem(`isSubmitted_${topicId}`);
+
+      // Navigate back
+      if (examId) {
+        navigate(`/exam/${examId}`);
+      } else {
+        navigate("/exam");
+      }
     }
   };
 
