@@ -52,6 +52,18 @@ const QuestionPage: React.FC = () => {
     return saved ? parseInt(saved, 10) : 1;
   });
   const [totalQuestions, setTotalQuestions] = useState(0);
+  const [filters, setFilters] = useState({
+    solved: false,
+    unsolved: true
+  });
+
+  const handleFilterChange = (filterType: 'solved' | 'unsolved', checked: boolean) => {
+    // If trying to uncheck and the other filter is also unchecked, prevent the change
+    if (!checked && !filters[filterType === 'solved' ? 'unsolved' : 'solved']) {
+      return; // Don't allow both to be unchecked
+    }
+    setFilters(prev => ({...prev, [filterType]: checked}));
+  };
 
   // Initialize state from localStorage or default values
   const [selectedAnswers, setSelectedAnswers] = useState<{
@@ -204,10 +216,22 @@ const QuestionPage: React.FC = () => {
           }}
         >
           <label>
-            <input type="checkbox" name="filter" value="solved" /> Solved
+            <input 
+              type="checkbox" 
+              name="filter" 
+              value="solved" 
+              checked={filters.solved}
+              onChange={(e) => handleFilterChange('solved', e.target.checked)}
+            /> Solved
           </label>
           <label>
-            <input type="checkbox" name="filter" value="unsolved" /> Unsolved
+            <input 
+              type="checkbox" 
+              name="filter" 
+              value="unsolved" 
+              checked={filters.unsolved}
+              onChange={(e) => handleFilterChange('unsolved', e.target.checked)}
+            /> Unsolved
           </label>
         </div>
       </div>
