@@ -117,28 +117,30 @@ const QuestionPage: React.FC = () => {
         console.log("API Response:", data); // Log the API response for debugging
 
         if (data.status === "success" && data.response) {
-          setQuestions(data.response.questions);
-          setTotalQuestions(data.response.total_count);
-          
-          // Update selectedAnswers with API's selected_option when available
-          const apiSelectedAnswers = { ...selectedAnswers };
-          const apiSubmittedState = { ...isSubmitted };
-          
-          data.response.questions.forEach(question => {
-            if (question.selected_option) {
-              // If API has a selected_option, use the corresponding choice value
-              const optionKey = question.selected_option;
-              const optionValue = question.choices[optionKey]?.value;
-              if (optionValue) {
-                apiSelectedAnswers[question.id] = optionKey
-                // Also mark the question as submitted
-                apiSubmittedState[question.id] = true;
+          if(Array.isArray(data.response.questions) && data.response.questions.length > 0) {
+            setQuestions(data.response.questions || []);
+            setTotalQuestions(data.response.total_count);
+            
+            // Update selectedAnswers with API's selected_option when available
+            const apiSelectedAnswers = { ...selectedAnswers };
+            const apiSubmittedState = { ...isSubmitted };
+            
+            data.response.questions.forEach(question => {
+              if (question.selected_option) {
+                // If API has a selected_option, use the corresponding choice value
+                const optionKey = question.selected_option;
+                const optionValue = question.choices[optionKey]?.value;
+                if (optionValue) {
+                  apiSelectedAnswers[question.id] = optionKey
+                  // Also mark the question as submitted
+                  apiSubmittedState[question.id] = true;
+                }
               }
-            }
-          });
-          
-          setSelectedAnswers(apiSelectedAnswers);
-          setIsSubmitted(apiSubmittedState);
+            });
+            
+            setSelectedAnswers(apiSelectedAnswers);
+            setIsSubmitted(apiSubmittedState);
+          }
         } else {
           setError(data.message || "Failed to fetch questions");
         }
@@ -415,6 +417,29 @@ const QuestionPage: React.FC = () => {
               />
             </div>
           ))}
+        
+        {!loading && !error && questions.length === 0 && (
+          <div className="alert alert-info mt-4" role="alert" style={{ 
+            textAlign: 'center',
+            padding: '2rem',
+            backgroundColor: '#e9f5ff',
+            borderRadius: '8px',
+            border: '1px solid #b6d4fe'
+          }}>
+            <h4 style={{ marginBottom: '1rem' }}>
+              {filters.solved && !filters.unsolved 
+                ? "No solved questions found"
+                : !filters.solved && filters.unsolved 
+                ? "No unsolved questions found" 
+                : "No questions available for this topic"}
+            </h4>
+            <p style={{ marginBottom: '0' }}>
+              {filters.solved || filters.unsolved 
+                ? "Try adjusting your filters or contact support if you believe this is an error."
+                : "Try adjusting your filters or contact support if you believe this is an error."}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Navigation Controls */}
@@ -423,7 +448,7 @@ const QuestionPage: React.FC = () => {
         totalQuestions={totalQuestions}
         handleNext={handleNext}
         handlePrevious={handlePrevious}
-        selectedAnswer={Object.values(selectedAnswers)}
+        selectedAnswer={Object.values(selectedAnswers || {})}
         isLoading={loading}
       />
     </div>
