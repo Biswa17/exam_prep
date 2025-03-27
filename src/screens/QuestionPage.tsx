@@ -141,6 +141,11 @@ const QuestionPage: React.FC = () => {
             setSelectedAnswers(apiSelectedAnswers);
             setIsSubmitted(apiSubmittedState);
           }
+          else{
+            setQuestions([]);
+            setTotalQuestions(1
+            );
+          }
         } else {
           setError(data.message || "Failed to fetch questions");
         }
