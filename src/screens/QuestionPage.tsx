@@ -164,7 +164,8 @@ const QuestionPage: React.FC = () => {
     }
   }, [topicId, pageNumber, filters]); // Refetch when topic, page, or filters change
 
-  const handleNext = async () => {
+  // Common function to submit user answers
+  const submitUserAnswers = async () => {
     try {
       await apiRequest(
         `/api/sf/questions/user-answer`,
@@ -177,10 +178,17 @@ const QuestionPage: React.FC = () => {
           }))
         }
       );
+      console.log("Answers submitted successfully."); // Optional: Add success log
     } catch (error) {
       console.error("Submission failed:", error);
+      // Optionally, you could re-throw the error or return a status
+      // throw error; // Uncomment if you want calling functions to handle the error
     }
-    
+  };
+
+  const handleNext = async () => {
+    await submitUserAnswers(); // Call the common function
+
     const totalPages = Math.ceil(totalQuestions / 10);
     const nextPage = pageNumber + 1;
     if (nextPage <= totalPages) {
@@ -194,21 +202,7 @@ const QuestionPage: React.FC = () => {
   };
 
   const handlePrevious = async () => {
-    try {
-      await apiRequest(
-        `/api/sf/questions/user-answer`,
-        "POST",
-        {
-          topic_id: Number(topicId),
-          answers: Object.entries(selectedAnswers).map(([questionId, option]) => ({
-            question_id: Number(questionId),
-            selected_option: option
-          }))
-        }
-      );
-    } catch (error) {
-      console.error("Submission failed:", error);
-    }
+    await submitUserAnswers(); // Call the common function
 
     if (pageNumber > 1) {
       console.log("Moving to previous page:", pageNumber - 1);
@@ -236,21 +230,10 @@ const QuestionPage: React.FC = () => {
 
   const handleBackToTopics = async () => {
     try {
-      // Submit answers to API
-      const response = await apiRequest(
-        `/api/sf/questions/user-answer`,
-        "POST",
-        {
-          topic_id: Number(topicId),
-          answers: Object.entries(selectedAnswers).map(([questionId, option]) => ({
-            question_id: Number(questionId),
-            selected_option: option
-          }))
-        }
-      );
-
+      await submitUserAnswers(); // Call the common function
     } catch (error) {
-      console.error("Submission failed:", error);
+      // Error is already logged in submitUserAnswers, but you could add more handling here if needed
+      console.error("Error during final submission:", error);
     } finally {
       // Clear local storage and state
       setSelectedAnswers({});

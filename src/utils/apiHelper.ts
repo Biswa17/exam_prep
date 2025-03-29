@@ -90,3 +90,92 @@ export const apiRequest = async <T>(
     };
   }
 };
+
+// Function to submit pending answers from localStorage before logout
+export const submitPendingAnswersBeforeLogout = async (): Promise<void> => {
+  console.log("Checking for pending answers before logout...");
+  const keysToRemove: string[] = [];
+  const submissionPromises: Promise<any>[] = [];
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith("selectedAnswers_")) {
+      const match = key.match(/^selectedAnswers_(\d+)$/);
+      if (match) {
+        const topicId = match[1];
+        const answersJson = localStorage.getItem(key);
+        if (answersJson) {
+          try {
+            const selectedAnswers = JSON.parse(answersJson);
+            const answerEntries = Object.entries(selectedAnswers);
+
+            if (answerEntries.length > 0) {
+              console.log(`Found pending answers for topic ${topicId}. Submitting...`);
+              const submissionPromise = apiRequest(
+                `/api/sf/questions/user-answer`,
+                "POST",
+                {
+                  topic_id: Number(topicId),
+                  answers: answerEntries.map(([questionId, option]) => ({
+                    question_id: Number(questionId),
+                    selected_option: option as string // Assuming option is always string
+                  }))
+                }
+              ).then(response => {
+                if (response.status === 'success') {
+                  console.log(`Successfully submitted answers for topic ${topicId}.`);
+                  // Mark related keys for removal only on successful submission
+                  keysToRemove.push(`selectedAnswers_${topicId}`);
+                  keysToRemove.push(`isSubmitted_${topicId}`);
+                  keysToRemove.push(`pageNumber_${topicId}`);
+                } else {
+                  console.error(`Failed to submit answers for topic ${topicId}:`, response.message);
+                  // Decide if you want to remove keys even on failure, maybe not?
+                  // For now, we only remove on success.
+                }
+              }).catch(error => {
+                console.error(`Error submitting answers for topic ${topicId}:`, error);
+                // Handle submission error, maybe retry or log?
+              });
+              submissionPromises.push(submissionPromise);
+            } else {
+              // If the answers object is empty, mark for removal anyway
+              console.log(`No pending answers to submit for topic ${topicId}, marking for cleanup.`);
+              keysToRemove.push(`selectedAnswers_${topicId}`);
+              keysToRemove.push(`isSubmitted_${topicId}`);
+              keysToRemove.push(`pageNumber_${topicId}`);
+            }
+          } catch (parseError) {
+            console.error(`Error parsing answers for topic ${topicId} from localStorage:`, parseError);
+            // Mark potentially corrupted key for removal
+            keysToRemove.push(key);
+            keysToRemove.push(`isSubmitted_${topicId}`);
+            keysToRemove.push(`pageNumber_${topicId}`);
+          }
+        } else {
+           // If value is null/empty, mark for removal
+           keysToRemove.push(key);
+           keysToRemove.push(`isSubmitted_${topicId}`);
+           keysToRemove.push(`pageNumber_${topicId}`);
+        }
+      }
+    }
+  }
+
+  // Wait for all submission attempts to complete
+  try {
+    await Promise.allSettled(submissionPromises);
+    console.log("Finished attempting all pending answer submissions.");
+  } catch (error) {
+    console.error("An error occurred while waiting for submissions:", error);
+  } finally {
+    // Clean up localStorage regardless of submission success/failure
+    // Use a Set to ensure unique keys before removing
+    const uniqueKeysToRemove = [...new Set(keysToRemove)];
+    console.log("Cleaning up localStorage keys:", uniqueKeysToRemove);
+    uniqueKeysToRemove.forEach(key => {
+      localStorage.removeItem(key);
+    });
+    console.log("LocalStorage cleanup complete.");
+  }
+};

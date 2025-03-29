@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './NavBar.css';
+import { submitPendingAnswersBeforeLogout } from '../../utils/apiHelper'; // Import the new function
 
 const NavBar: React.FC = () => {
   const location = useLocation();
@@ -28,6 +29,9 @@ const NavBar: React.FC = () => {
   }, []);
 
   const handleLogout = async () => {
+    // Call the function to submit pending answers before proceeding
+    await submitPendingAnswersBeforeLogout();
+
     try {
       const token = localStorage.getItem('access_token');
       const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/logout`, {
