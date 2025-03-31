@@ -61,36 +61,6 @@ const Login = () => {
     }
   };
 
-  const handleResendOtp = async () => {
-    setError("");
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/auth/get_otp`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Failed to resend OTP. Please try again.");
-        return;
-      }
-
-      setUserId(data.response.user_id);
-      setOtpInput(""); // Clear previous OTP input
-    } catch (err) {
-      setError("Network error. Please check your connection and try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleVerifyOtp = async () => {
     if (!userId) {
       setError("Invalid session. Please try again.");
@@ -204,7 +174,7 @@ const Login = () => {
               </div>
               <button
                 className="resend-otp-button"
-                onClick={handleResendOtp}
+                onClick={handleGetOtp} // Changed from handleResendOtp
                 disabled={isLoading}
               >
                 {isLoading ? <span className="loader"></span> : "Resend OTP"}

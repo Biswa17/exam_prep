@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 // Define the type for the Topics and Previous Papers sections
 interface TopicsAndPapersProps {
-  topics: { id: number, name: string }[]; // Array of topics with id and name
+  topics: { id: number, name: string, solved_percentage: number }[]; // Include solved_percentage
   previousPapers: { id: number, name: string }[];
   examId: number;
 }
@@ -41,13 +41,14 @@ const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPaper
                 <div className="card-body text-center">
                   <h5 className="card-title text-primary" style={{ fontWeight: 'bold' }}>{topic.name}</h5>
                   {/* Progress Bar */}
-                  <div style={{ height: '5px', backgroundColor: '#e0e0e0' }}>
+                  <div style={{ height: '5px', backgroundColor: '#e0e0e0', borderRadius: '5px', overflow: 'hidden' }}> {/* Added borderRadius and overflow */}
                     <div 
                       style={{
                         height: '100%',
-                        width: '60%', // Update with dynamic progress if needed
+                        width: `${topic.solved_percentage}%`, // Update width dynamically
                         backgroundColor: '#28a745',
-                        borderRadius: '5px',
+                        borderRadius: '5px', // Keep border radius for inner bar
+                        transition: 'width 0.5s ease-in-out' // Optional: Add transition for visual effect
                       }}
                     ></div>
                   </div>

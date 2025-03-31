@@ -9,7 +9,7 @@ import { apiRequest } from "../utils/apiHelper"
 interface ExamDetails {
   name: string;
   description: string;
-  topics: { id: number, name: string }[]; // Include topic ID
+  topics: { id: number, name: string, solved_percentage: number }[]; // Include topic ID and solved percentage
   previousPapers: { id: number, name: string }[];
 }
 
@@ -22,7 +22,13 @@ const ExamDetailPage: React.FC = () => {
 
     const fetchExamDetails = async () => {
       try {
-        const data = await apiRequest<{ name: string; description: string; topics: { id: number; name: string }[]; question_papers: { id: number; name: string }[] }>(
+        // Update the expected type for the API response
+        const data = await apiRequest<{ 
+          name: string; 
+          description: string; 
+          topics: { id: number; name: string; solved_percentage: number }[]; 
+          question_papers: { id: number; name: string }[] 
+        }>(
           `/api/sf/get_exam/${examId}`,
           "GET"
         );
@@ -30,7 +36,12 @@ const ExamDetailPage: React.FC = () => {
           setExamDetails({
             name: data.response.name,
             description: data.response.description,
-            topics: data.response.topics?.map((topic: { id: number, name: string }) => ({ id: topic.id, name: topic.name })) || [],
+            // Map solved_percentage along with id and name
+            topics: data.response.topics?.map((topic: { id: number, name: string, solved_percentage: number }) => ({ 
+              id: topic.id, 
+              name: topic.name, 
+              solved_percentage: topic.solved_percentage 
+            })) || [],
             previousPapers: data.response.question_papers?.map((paper: { id: number, name: string }) => ({ id: paper.id, name: paper.name })) || [],
           });
         }
