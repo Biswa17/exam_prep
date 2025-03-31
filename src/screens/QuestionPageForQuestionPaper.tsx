@@ -168,10 +168,10 @@ const QuestionPageForQuestionPaper: React.FC = () => {
   const submitUserAnswers = async () => {
     try {
       await apiRequest(
-        `/api/sf/questions/user-answer`,
+        `/api/sf/questions/user-answer-for-question-paper`,
         "POST",
         {
-          topic_id: Number(questionPaperId), // Using questionPaperId as topic_id as confirmed
+          question_paper_id: Number(questionPaperId), // Using questionPaperId as topic_id as confirmed
           answers: Object.entries(selectedAnswers).map(([questionId, option]) => ({
             question_id: Number(questionId),
             selected_option: option

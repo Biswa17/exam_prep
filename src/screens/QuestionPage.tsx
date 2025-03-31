@@ -168,7 +168,7 @@ const QuestionPage: React.FC = () => {
   const submitUserAnswers = async () => {
     try {
       await apiRequest(
-        `/api/sf/questions/user-answer`,
+        `/api/sf/questions/user-answer-by-topic`,
         "POST",
         {
           topic_id: Number(topicId),

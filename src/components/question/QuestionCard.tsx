@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Latex from "react-latex-next";
 import "./QuestionCard.css";
 
 // Define types for the question and choices
@@ -39,7 +40,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
   return (
     <div className="question-card card p-4">
-      <h5 className="question-text">{question.question_text}</h5>
+      <h5 className="question-text"><Latex>{question.question_text}</Latex></h5>
       <div className="options-container">
         {Object.keys(question.choices).map((optionKey, idx) => {
           const option = question.choices[optionKey];
@@ -65,7 +66,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
                   className="custom-radio-input"
                 />
                 <span className="custom-radio-label">
-                  {optionKey} - {option.value}
+                  {optionKey} - <Latex>{option.value}</Latex>
                 </span>
               </label>
             </div>
