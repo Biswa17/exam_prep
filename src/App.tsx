@@ -9,6 +9,7 @@ import AboutPage from './screens/AboutPage';
 import ContactPage from './screens/ContactPage';
 import ExamDetails from './screens/ExamDetailPage';
 import QuestionPage from './screens/QuestionPage';
+import QuestionPageForQuestionPaper from './screens/QuestionPageForQuestionPaper'; // Added import
 import Login from './screens/Login';
 import ProfilePage from './screens/ProfilePage';
 
@@ -27,6 +28,7 @@ const App: React.FC = () => {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/exam/:examId" element={<ExamDetails />} />
             <Route path="/questions/:topicId" element={<QuestionPage />} />
+            <Route path="/question-paper/:questionPaperId" element={<QuestionPageForQuestionPaper />} /> {/* Added route */}
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </main>

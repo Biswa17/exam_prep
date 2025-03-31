@@ -97,9 +97,23 @@ const TopicsAndPapers: React.FC<TopicsAndPapersProps> = ({ topics, previousPaper
                       View Paper
                     </a>
                     {/* Attempt Paper Button */}
-                    <a href="#" className="btn btn-outline-primary w-48" style={{ borderRadius: '20px' }}>
-                      Attempt Paper
-                    </a>
+                    {accessToken ? (
+                      <Link
+                        to={`/question-paper/${paper.id}?examId=${examId}`} // Updated link for question papers
+                        className="btn btn-outline-primary w-48"
+                        style={{ borderRadius: '20px' }}
+                      >
+                        Attempt Paper
+                      </Link>
+                    ) : (
+                      <button
+                        className="btn btn-outline-primary w-48"
+                        style={{ borderRadius: '20px' }}
+                        onClick={handleLoginRedirect}
+                      >
+                        Login to Attempt
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
