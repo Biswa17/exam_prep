@@ -13,6 +13,7 @@ interface Question {
   question_text: string;
   choices: { [key: string]: Choice };
   correct_option: string;
+  images: string[]; // Added images field
 }
 
 interface QuestionCardProps {
@@ -41,6 +42,34 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   return (
     <div className="question-card card p-4">
       <h5 className="question-text"><Latex>{question.question_text}</Latex></h5>
+      {/* Image container */}
+      {question.images && question.images.length > 0 && (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            marginTop: "10px",
+            justifyContent: "flex-start", // Or 'center'
+          }}
+        >
+          {question.images.map((imgSrc, index) => (
+            <img
+              key={index}
+              src={imgSrc}
+              alt={`Question image ${index + 1}`}
+              style={{
+                flexBasis: "calc(50% - 10px)",
+                margin: "5px",
+                maxWidth: "calc(50% - 10px)",
+                maxHeight: "250px",
+                objectFit: "contain",
+                border: "1px solid #eee", // Optional: add a light border
+                borderRadius: "4px", // Optional: rounded corners
+              }}
+            />
+          ))}
+        </div>
+      )}
       <div className="options-container">
         {Object.keys(question.choices).map((optionKey, idx) => {
           const option = question.choices[optionKey];
