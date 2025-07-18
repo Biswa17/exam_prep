@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion, Card, ListGroup, Badge } from 'react-bootstrap';
+import { Accordion, Card, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { apiRequest } from '../utils/apiHelper';
 import './ExamsPage.css';
 
-// TypeScript interfaces for the data structure
+// TypeScript interfaces for the API response structure
 interface Exam {
   id: number;
   name: string;
@@ -16,7 +18,7 @@ interface Subcategory {
   description: string;
   parent_id: number;
   level: number;
-  children: any[]; // This array is empty in the provided data
+  children: Subcategory[];
   exams: Exam[];
 }
 
@@ -29,176 +31,66 @@ interface Category {
   children: Subcategory[];
 }
 
-// Provided category tree data
-const categoryTreeData: Category[] = 
-[
-    {
-        "id": 1,
-        "name": "Engineering",
-        "description": "All engineering-related exams",
-        "parent_id": null,
-        "level": 1,
-        "children": [
-            {
-                "id": 5,
-                "name": "GATE",
-                "description": "Graduate Aptitude Test in Engineering",
-                "parent_id": 1,
-                "level": 2,
-                "children": [],
-                "exams": [
-                    {
-                        "id": 1,
-                        "name": "GATE CSE",
-                        "description": "Graduate Aptitude Test in Engineering for Computer Science and Engineering."
-                    },
-                    {
-                        "id": 6,
-                        "name": "GATE Mecha",
-                        "description": "gate mechainal eng"
-                    }
-                ]
-            },
-            {
-                "id": 6,
-                "name": "JEE Main",
-                "description": "Joint Entrance Examination Main",
-                "parent_id": 1,
-                "level": 2,
-                "children": [],
-                "exams": [
-                    {
-                        "id": 2,
-                        "name": "JEE",
-                        "description": "Joint Entrance Examination for undergraduate engineering courses."
-                    }
-                ]
-            },
-            {
-                "id": 7,
-                "name": "JEE Advanced",
-                "description": "Joint Entrance Examination Advanced",
-                "parent_id": 1,
-                "level": 2,
-                "children": [],
-                "exams": [
-                    {
-                        "id": 2,
-                        "name": "JEE",
-                        "description": "Joint Entrance Examination for undergraduate engineering courses."
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "name": "Medical",
-        "description": "All medical-related exams",
-        "parent_id": null,
-        "level": 1,
-        "children": [
-            {
-                "id": 8,
-                "name": "NEET UG",
-                "description": "National Eligibility cum Entrance Test for UG",
-                "parent_id": 2,
-                "level": 2,
-                "children": [],
-                "exams": [
-                    {
-                        "id": 3,
-                        "name": "NEET",
-                        "description": "National Eligibility cum Entrance Test for medical courses."
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "id": 3,
-        "name": "Management",
-        "description": "All management-related exams",
-        "parent_id": null,
-        "level": 1,
-        "children": [
-            {
-                "id": 9,
-                "name": "CAT",
-                "description": "Common Admission Test for management courses",
-                "parent_id": 3,
-                "level": 2,
-                "children": [],
-                "exams": [
-                    {
-                        "id": 5,
-                        "name": "CAT",
-                        "description": "Common Admission Test for management courses."
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "id": 4,
-        "name": "Civil Services",
-        "description": "Civil service and government exams",
-        "parent_id": null,
-        "level": 1,
-        "children": [
-            {
-                "id": 10,
-                "name": "UPSC CSE",
-                "description": "Union Public Service Commission Civil Services Examination",
-                "parent_id": 4,
-                "level": 2,
-                "children": [],
-                "exams": [
-                    {
-                        "id": 4,
-                        "name": "UPSC",
-                        "description": "Union Public Service Commission Civil Services Examination."
-                    }
-                ]
-            }
-        ]
-    }
-];
-
 const ExamsPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<Category[]>([]); // State to hold the data
 
   useEffect(() => {
-    // Simulate data fetching
-    setTimeout(() => {
+    const fetchCategories = async () => {
       try {
-        // In a real app, you would fetch this data from an API
-        if (categoryTreeData && Array.isArray(categoryTreeData)) {
-          setData(categoryTreeData);
-          setLoading(false);
+        const apiData = await apiRequest<Category[]>('/api/sf/categories/tree', 'GET');
+        
+        if (apiData.status === 'success' && apiData.response) {
+          setData(apiData.response);
         } else {
-          throw new Error('Invalid data format received');
+          throw new Error(apiData.message || 'Failed to fetch categories');
         }
       } catch (err) {
-        console.error("Error processing exam categories:", err);
-        setError('Failed to load exam categories. Please try again later.');
+        console.error("Error fetching exam categories:", err);
+        setError(err instanceof Error ? err.message : 'Failed to load exam categories. Please try again later.');
+      } finally {
         setLoading(false);
       }
-    }, 500); // Reduced timeout for quicker feedback
+    };
+
+    fetchCategories();
   }, []);
 
   if (loading) {
-    return <div className="container mt-4 text-center loading-container">Loading...</div>;
+    return (
+      <div className="container mt-4 text-center loading-container">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3 text-muted">Loading exam categories...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="container mt-4 text-center text-danger error-container">Error: {error}</div>;
+    return (
+      <div className="container mt-4 text-center error-container">
+        <div className="alert alert-danger" role="alert">
+          <h5 className="alert-heading">Oops! Something went wrong</h5>
+          <p>{error}</p>
+          <button className="btn btn-outline-danger btn-sm" onClick={() => window.location.reload()}>
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (!data || data.length === 0) {
-    return <div className="container mt-4 text-center">No exam categories found.</div>;
+    return (
+      <div className="container mt-4 text-center">
+        <div className="alert alert-info" role="alert">
+          <h5 className="alert-heading">No Exams Found</h5>
+          <p>We couldn't find any exam categories at the moment. Please check back later.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -211,12 +103,32 @@ const ExamsPage: React.FC = () => {
           </div>
         </div>
         
-        <Accordion defaultActiveKey="1"> {/* Start with first category open */}
+        <Accordion 
+          defaultActiveKey="1" 
+          aria-label="Exam categories"
+          className="accordion-container"
+        >
           {data.map((category) => (
-            <Accordion.Item key={category.id} eventKey={category.id.toString()} className="mb-4 category-accordion">
-              <Accordion.Header>
+            <Accordion.Item 
+              key={category.id} 
+              eventKey={category.id.toString()} 
+              className="mb-4 category-accordion"
+            >
+              <Accordion.Header
+                onClick={(e) => {
+                  // Prevent default scroll behavior
+                  e.preventDefault();
+                  // Use smooth scrolling
+                  const header = e.currentTarget;
+                  setTimeout(() => {
+                    header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                  }, 100);
+                }}
+              >
                 <span className="category-name">{category.name}</span>
-                <Badge bg="primary" pill className="ms-2">{category.children.length}</Badge>
+                <Badge bg="primary" pill className="ms-2" aria-label={`${category.children.length} subcategories`}>
+                  {category.children.length}
+                </Badge>
               </Accordion.Header>
               <Accordion.Body>
                 <p className="category-description mb-4">{category.description}</p>
@@ -238,13 +150,14 @@ const ExamsPage: React.FC = () => {
                                     <Card.Text className="exam-card-description text-muted small flex-grow-1">
                                       {exam.description}
                                     </Card.Text>
-                                    <Link to={`/exam/${exam.id}`} className="btn btn-outline-primary btn-sm mt-3 align-self-start">
+                                    <Link 
+                                      to={`/exam/${exam.id}`} 
+                                      className="btn btn-primary btn-sm mt-3 align-self-start"
+                                      aria-label={`View details for ${exam.name}`}
+                                    >
                                       View Details
                                     </Link>
                                   </Card.Body>
-                                  <Card.Footer className="text-muted small">
-                                    Exam ID: {exam.id}
-                                  </Card.Footer>
                                 </Card>
                               </div>
                             ))}

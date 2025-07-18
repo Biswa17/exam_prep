@@ -126,3 +126,17 @@
   justify-content: center;
   flex-direction: column;
 }
+
+/* Prevent scroll jump on accordion */
+.accordion-container {
+  scroll-behavior: smooth;
+}
+
+.accordion-button {
+  scroll-margin-top: 100px; /* Prevent header from being hidden by fixed nav */
+}
+
+/* Ensure smooth transitions */
+.accordion-collapse {
+  transition: height 0.3s ease;
+}
