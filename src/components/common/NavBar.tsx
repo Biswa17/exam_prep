@@ -89,6 +89,12 @@ const NavBar: React.FC = () => {
                 <span className="nav-text">Home</span>
               </Link>
             </li>
+            {/* Add Exams link */}
+            <li className="nav-item">
+              <Link className={`nav-link ${location.pathname === '/exams' ? 'active' : ''}`} to="/exams">
+                <span className="nav-text">Exams</span>
+              </Link>
+            </li>
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname === '/features' ? 'active' : ''}`} to="/features">
                 <span className="nav-text">Features</span>

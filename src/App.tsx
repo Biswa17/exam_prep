@@ -12,6 +12,7 @@ import QuestionPage from './screens/QuestionPage';
 import QuestionPageForQuestionPaper from './screens/QuestionPageForQuestionPaper'; // Added import
 import Login from './screens/Login';
 import ProfilePage from './screens/ProfilePage';
+import ExamsPage from './screens/ExamsPage'; // Import the ExamsPage component
 
 const App: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ const App: React.FC = () => {
             <Route path="/exam/:examId" element={<ExamDetails />} />
             <Route path="/questions/:topicId" element={<QuestionPage />} />
             <Route path="/question-paper/:questionPaperId" element={<QuestionPageForQuestionPaper />} /> {/* Added route */}
+            <Route path="/exams" element={<ExamsPage />} /> {/* Add route for ExamsPage */}
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </main>
