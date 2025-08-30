@@ -1,0 +1,122 @@
+/* Basic styling for Exams Page - Adapt colors/fonts to match your theme */
+
+.exams-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f8f9fa; /* Example background - adjust to match theme */
+}
+
+.exams-content {
+    flex-grow: 1;
+    padding: 2rem 1rem; /* Adjust padding */
+    max-width: 1200px; /* Optional: constrain width */
+    margin: 2rem auto; /* Add top/bottom margin and center */
+    width: 95%; /* Use percentage for responsiveness */
+    background-color: #ffffff; /* White background for content area */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.exams-content h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #343a40; /* Darker heading color */
+    font-size: 2rem; /* Larger heading */
+}
+
+.category-layout {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 1.5rem; /* Space between sidebar and main content */
+}
+
+.category-sidebar {
+    flex: 1 1 280px; /* Flexible sidebar, base width 280px */
+    max-width: 300px; /* Max width */
+    border-right: 1px solid #dee2e6; /* Lighter separator */
+    padding-right: 1.5rem;
+    margin-bottom: 1rem; /* Add margin for wrapped layout */
+}
+
+/* Remove border on smaller screens when wrapped */
+@media (max-width: 768px) {
+    .category-sidebar {
+        border-right: none;
+        padding-right: 0;
+        flex-basis: 100%; /* Take full width when wrapped */
+        max-width: none;
+    }
+    .category-layout {
+        flex-direction: column;
+    }
+}
+
+
+.category-sidebar h2 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    color: #495057; /* Slightly lighter heading color */
+    border-bottom: 2px solid #007bff; /* Accent border - match theme */
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.category-sidebar ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.category-sidebar li {
+    padding: 0.6rem 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-radius: 4px;
+    margin-bottom: 0.25rem; /* Space between items */
+    color: #495057;
+}
+
+.category-sidebar li:hover {
+    background-color: #e9ecef; /* Lighter hover */
+    color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style nested lists for subcategories */
+.category-sidebar ul ul {
+    padding-left: 1.2rem; /* Indent subcategories */
+    margin-top: 0.4rem;
+    border-left: 2px solid #e9ecef; /* Subtle left border for nesting */
+}
+
+.category-main-content {
+    flex: 2 1 500px; /* Main content takes more space */
+    padding-left: 1.5rem; /* Add padding when sidebar is present */
+}
+
+@media (max-width: 768px) {
+    .category-main-content {
+        padding-left: 0; /* Remove padding on small screens */
+    }
+}
+
+.category-main-content p {
+    color: #6c757d; /* Muted text color */
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.error-message {
+    color: #dc3545; /* Bootstrap danger color */
+    font-weight: bold;
+    padding: 0.5rem;
+    border: 1px solid #f5c6cb; /* Light red border */
+    background-color: #f8d7da; /* Light red background */
+    border-radius: 4px;
+}
+
+/* Add styles for loading state if needed */
+.category-sidebar p {
+     color: #6c757d;
+}
