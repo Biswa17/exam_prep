@@ -30,6 +30,7 @@ interface Question {
   choices: { [key: string]: Choice };
   correct_option: string;
   selected_option: string | null;
+  images: string[]; // Added images field to match QuestionCard.tsx
 }
 
 const QuestionPage: React.FC = () => {

@@ -1,3 +1,145 @@
+/* ExamsPage.css */
+
+.exams-page {
+  background-color: var(--background-light);
+  min-height: 100vh;
+}
+
+.exams-page h1 {
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.category-accordion {
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.category-accordion:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.accordion-button {
+  background-color: white;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: rgba(37, 99, 235, 0.05);
+  color: var(--primary-color);
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  border-color: rgba(37, 99, 235, 0.1);
+}
+
+.category-name {
+  margin-right: 0.5rem;
+}
+
+.category-description {
+  color: var(--text-dark);
+  opacity: 0.8;
+  font-size: 1.05rem;
+}
+
+.subcategory-section {
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef; /* Separator */
+}
+
+.subcategory-section:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.subcategory-heading {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 1.5rem; /* Make subcategory headings distinct */
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.subcategory-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--primary-color);
+}
+
+.exam-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem; /* Slightly less rounded */
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.exam-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
+}
+
+.exam-card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+}
+
+.exam-card-description {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.exam-card .card-footer {
+  background-color: #f8fafc; /* Light footer background */
+  border-top: 1px solid #e2e8f0;
+  padding: 0.5rem 1rem;
+}
+
+.alert-light {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  color: #6c757d;
+}
+
+/* Loading and error states */
+.loading-container, 
+.error-container {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Prevent scroll jump on accordion */
+.accordion-container {
+  scroll-behavior: smooth;
+}
+
+.accordion-button {
+  scroll-margin-top: 100px; /* Prevent header from being hidden by fixed nav */
+}
+
+/* Ensure smooth transitions */
+.accordion-collapse {
+  transition: height 0.3s ease;
+}
 /* Basic styling for Exams Page - Adapt colors/fonts to match your theme */
 
 .exams-page {

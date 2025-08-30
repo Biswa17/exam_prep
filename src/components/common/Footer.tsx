@@ -67,12 +67,45 @@ const Footer: React.FC = () => {
 
         {/* Newsletter Section */}
         <div className="row mt-5">
-          <div className="col-md-6 mx-auto text-center">
-            <h5 className="footer-heading mb-3 text-primary">Subscribe to Our Newsletter</h5>
-            <div className="input-group mb-3">
-              <input type="email" className="form-control" placeholder="Enter your email" aria-label="Email for newsletter" />
-              <button className="btn btn-primary" type="button">Subscribe</button>
+          <div className="col-lg-8 col-md-10 mx-auto text-center">
+            <h5 className="footer-heading mb-4 text-primary">Subscribe to Our Newsletter</h5>
+            <p className="text-light-emphasis mb-4">Stay updated with the latest exam notifications, study tips, and exclusive offers.</p>
+            <div className="d-flex justify-content-center">
+              <div style={{ width: '100%', maxWidth: '600px' }}>
+                <div className="d-flex gap-0 mb-3">
+                  <input 
+                    type="email" 
+                    className="form-control form-control-lg" 
+                    placeholder="Enter your email address" 
+                    aria-label="Email for newsletter"
+                    style={{ 
+                      minHeight: '55px',
+                      fontSize: '1.1rem',
+                      padding: '0.75rem 1rem',
+                      width: '70%',
+                      borderTopRightRadius: '0',
+                      borderBottomRightRadius: '0'
+                    }}
+                  />
+                  <button 
+                    className="btn btn-primary" 
+                    type="button"
+                    style={{
+                      minHeight: '55px',
+                      padding: '0.75rem 1.5rem',
+                      fontSize: '1.1rem',
+                      width: '30%',
+                      borderTopLeftRadius: '0',
+                      borderBottomLeftRadius: '0'
+                    }}
+                  >
+                    <i className="bi bi-envelope me-2"></i>
+                    Subscribe
+                  </button>
+                </div>
+              </div>
             </div>
+            <small className="text-light-emphasis">We respect your privacy. Unsubscribe at any time.</small>
           </div>
         </div>
 
